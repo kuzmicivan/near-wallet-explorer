@@ -1,9 +1,9 @@
 import { FunctionComponent } from "react";
 import { TRANSACTION_PROPERTIES, TRANSACTIONS } from "@/constants/constants";
 import Link from "next/link";
-import { TransactionStatus, Status } from "@/constants/types";
+import { TransactionStatus } from "@/constants/types";
 import { getTransferAmount } from "@/lib/near";
-import { checkStatusColor } from "@/lib/status"
+import { checkStatus } from "@/lib/status"
 
 type TransactionHistoryProps = {
     transactions: TransactionStatus[],
@@ -52,7 +52,15 @@ const TransactionHistory: FunctionComponent<TransactionHistoryProps> = ({ transa
                             <td className="text-center px-8 hidden lg:table-cell">{transaction.transaction.receiver_id}</td>
                             <td className="text-center px-8 hidden sm:table-cell">{getTransferAmount(transaction)} Ⓝ</td>
                             <td className="flex justify-center items-center px-8 py-2 ">
-                                <span className={` ${checkStatusColor(transaction.status)} h-2 w-2 rounded-full shadow-md`}></span>
+                                {checkStatus(transaction.status) === 'Success' &&
+                                    <span className='bg-green-500 h-2 w-2 rounded-full shadow-md'></span>
+                                }
+                                {checkStatus(transaction.status) === 'Error' &&
+                                    <span className='bg-red-500 h-2 w-2 rounded-full shadow-md'></span>
+                                }
+                                {checkStatus(transaction.status) === 'Unknown' &&
+                                    <span className='bg-yellow-500 h-2 w-2 rounded-full shadow-md'></span>
+                                }
                             </td> 
                         </tr>
                     )
